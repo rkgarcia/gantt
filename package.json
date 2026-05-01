@@ -1,0 +1,29 @@
+{
+  "name": "gantt-ts",
+  "version": "0.1.0",
+  "description": "A customizable Gantt chart library in TypeScript with theme support and multi-format export",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "npx playwright test",
+    "test:e2e:update": "npx playwright test --update-snapshots",
+    "test:all": "npm run test && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  },
+  "keywords": ["gantt", "chart", "timeline", "typescript", "svg"],
+  "license": "MIT"
+}
