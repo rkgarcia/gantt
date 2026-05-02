@@ -2,11 +2,8 @@ import { test, expect } from '@playwright/test';
 import { renderSVG } from '../../src/renderer';
 import * as fs from 'fs';
 import * as path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const SCREENSHOTS_DIR = path.resolve(__dirname, '../screenshots');
+const SCREENSHOTS_DIR = path.resolve('tests/screenshots');
 fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
 
 // ── Shared test data ──────────────────────────────────────────────────────────
