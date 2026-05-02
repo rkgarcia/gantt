@@ -1,5 +1,9 @@
 # gantt-ts
 
+[![npm](https://img.shields.io/npm/v/gantt-ts)](https://www.npmjs.com/package/gantt-ts)
+[![CI](https://github.com/rkgarcia/gantt/actions/workflows/release.yml/badge.svg)](https://github.com/rkgarcia/gantt/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 A zero-dependency TypeScript library for rendering customizable Gantt charts as SVG, with support for themes, element toggling, and multi-format export (SVG / PNG / JPEG).
 
 ---
@@ -79,6 +83,52 @@ gantt.update({ theme: 'forest', timeUnit: 'week' });
 gantt.exportSVG({ filename: 'sprint-plan' });
 await gantt.exportPNG({ filename: 'sprint-plan', scale: 2 });
 await gantt.exportJPG({ filename: 'sprint-plan', scale: 2, quality: 0.9 });
+```
+
+### React
+
+```tsx
+import { useEffect, useRef } from 'react';
+import GanttChart from 'gantt-ts';
+
+const tasks = [
+  { id: '1', name: 'Research',    start: new Date('2025-01-06'), end: new Date('2025-01-17'), group: 'Phase 1', progress: 100 },
+  { id: '2', name: 'Design',      start: new Date('2025-01-20'), end: new Date('2025-02-07'), group: 'Phase 1', dependencies: ['1'] },
+  { id: '3', name: 'Development', start: new Date('2025-02-10'), end: new Date('2025-03-14'), group: 'Phase 2', dependencies: ['2'] },
+  { id: '4', name: 'Launch',      start: new Date('2025-03-21'), end: new Date('2025-03-21'), milestone: true, dependencies: ['3'] },
+];
+
+export function Roadmap() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const chart = new GanttChart({ title: 'Roadmap', timeUnit: 'week', theme: 'dark', tasks });
+    chart.mount(ref.current);
+  }, []);
+
+  return <div ref={ref} />;
+}
+```
+
+### Plain HTML (CDN / ES module)
+
+```html
+<div id="chart"></div>
+<script type="module">
+  import GanttChart from 'https://esm.sh/gantt-ts';
+
+  new GanttChart({
+    title: 'My Project',
+    timeUnit: 'week',
+    theme: 'ocean',
+    tasks: [
+      { id: '1', name: 'Design',   start: new Date('2025-01-06'), end: new Date('2025-01-17') },
+      { id: '2', name: 'Build',    start: new Date('2025-01-20'), end: new Date('2025-02-14'), dependencies: ['1'] },
+      { id: '3', name: 'Ship',     start: new Date('2025-02-14'), end: new Date('2025-02-14'), milestone: true },
+    ],
+  }).mount(document.getElementById('chart'));
+</script>
 ```
 
 ---

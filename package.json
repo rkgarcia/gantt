@@ -2,9 +2,7 @@
   "name": "gantt-ts",
   "version": "0.1.0",
   "description": "A customizable Gantt chart library in TypeScript with theme support and multi-format export",
-  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": ["dist"],
   "scripts": {
