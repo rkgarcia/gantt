@@ -1,10 +1,12 @@
 {
   "name": "gantt-ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A customizable Gantt chart library in TypeScript with theme support and multi-format export",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -22,6 +24,12 @@
     "typescript": "^5.4.0",
     "vitest": "^1.6.0"
   },
-  "keywords": ["gantt", "chart", "timeline", "typescript", "svg"],
+  "keywords": [
+    "gantt",
+    "chart",
+    "timeline",
+    "typescript",
+    "svg"
+  ],
   "license": "MIT"
 }
