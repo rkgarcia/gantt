@@ -1,6 +1,6 @@
 # gantt-ts
 
-[![npm](https://img.shields.io/npm/v/gantt-ts)](https://www.npmjs.com/package/gantt-ts)
+[![npm](https://img.shields.io/npm/v/@rkgarcia/gantt-ts)](https://www.npmjs.com/package/@rkgarcia/gantt-ts)
 [![CI](https://github.com/rkgarcia/gantt/actions/workflows/release.yml/badge.svg)](https://github.com/rkgarcia/gantt/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
