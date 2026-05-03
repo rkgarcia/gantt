@@ -1,5 +1,6 @@
 import { GanttOptions, GanttTheme, LayoutRow, TimeColumn } from './types';
 import { resolveTheme } from './themes';
+import { getLanguagePack } from './i18n';
 import {
   parseDates, getDateRange, generateColumns, generateHeaderSpans,
   buildRows, dateToX, getChartEnd,
@@ -28,6 +29,7 @@ export function renderSVG(options: GanttOptions): string {
 
   const theme = resolveTheme(options.theme);
   const el = { ...DEFAULT_ELEMENTS, ...options.elements };
+  const language = options.language ?? 'en';
   const timeUnit = options.timeUnit ?? 'week';
   const rowH = options.rowHeight ?? 40;
   const labelW = options.labelWidth ?? 190;
@@ -35,8 +37,8 @@ export function renderSVG(options: GanttOptions): string {
   const colW = options.columnWidth ?? COL_WIDTHS[timeUnit] ?? 72;
 
   const { start: rangeStart, end: rangeEnd } = getDateRange(tasks, options.startDate, options.endDate, timeUnit);
-  const columns = generateColumns(rangeStart, rangeEnd, timeUnit);
-  const spans = generateHeaderSpans(columns, timeUnit);
+  const columns = generateColumns(rangeStart, rangeEnd, timeUnit, language);
+  const spans = generateHeaderSpans(columns, timeUnit, language);
   const chartEnd = getChartEnd(columns, timeUnit);
   const chartStart = columns[0]?.date ?? rangeStart;
   const rows = buildRows(tasks, theme.palette);
@@ -184,7 +186,7 @@ export function renderSVG(options: GanttOptions): string {
 
   // Legend
   if (el.showLegend) {
-    o += legend(theme, pad, cY + bodyH + 6, legendH);
+    o += legend(theme, pad, cY + bodyH + 6, legendH, language);
   }
 
   o += `</svg>`;
@@ -342,31 +344,32 @@ function renderBars(
   return o;
 }
 
-function legend(theme: GanttTheme, pad: number, y: number, h: number): string {
+function legend(theme: GanttTheme, pad: number, y: number, h: number, language: 'en' | 'es' = 'en'): string {
+  const lang = getLanguagePack(language);
   const items: Array<{ label: string; draw: () => string }> = [
     {
       label: 'Task',
       draw: () => `<rect x="0" y="3" width="16" height="10" rx="2" fill="${theme.palette[0]}" opacity="0.85"/>`,
     },
     {
-      label: 'Milestone',
+      label: lang.legendLabels.milestone,
       draw: () => `<polygon points="8,0 16,8 8,16 0,8" fill="${theme.milestone}" stroke="${theme.milestoneStroke}" stroke-width="0.5"/>`,
     },
     {
-      label: 'Progress',
+      label: lang.legendLabels.progress,
       draw: () => `<rect x="0" y="3" width="16" height="10" rx="2" fill="${theme.palette[0]}" opacity="0.3"/><rect x="0" y="3" width="9" height="10" rx="2" fill="${theme.taskProgress}" opacity="0.6"/>`,
     },
     {
-      label: 'Today',
+      label: lang.legendLabels.today,
       draw: () => `<line x1="8" y1="0" x2="8" y2="16" stroke="${theme.today}" stroke-width="2" stroke-dasharray="3,2"/><polygon points="3,0 13,0 8,6" fill="${theme.today}"/>`,
     },
     {
-      label: 'Dependency',
+      label: lang.legendLabels.dependency,
       draw: () => `<line x1="0" y1="8" x2="12" y2="8" stroke="${theme.dependency}" stroke-width="1.5" marker-end="url(#arr)"/>`,
     },
   ];
 
-  let o = `<text x="${pad + 4}" y="${y + h / 2 + 4}" fill="${theme.textSecondary}" font-size="10" font-weight="600">LEGEND:</text>`;
+  let o = `<text x="${pad + 4}" y="${y + h / 2 + 4}" fill="${theme.textSecondary}" font-size="10" font-weight="600">${lang.legendTitle}</text>`;
   let lx = pad + 68;
 
   for (const item of items) {

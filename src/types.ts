@@ -59,6 +59,7 @@ export interface GanttOptions {
   tasks: Task[];
   theme?: Partial<GanttTheme> | 'light' | 'dark' | 'ocean' | 'forest';
   elements?: GanttElements;
+  language?: 'en' | 'es';
   startDate?: Date;
   endDate?: Date;
   timeUnit?: TimeUnit;

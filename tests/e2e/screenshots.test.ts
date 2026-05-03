@@ -223,3 +223,20 @@ test.describe('Custom dimensions', () => {
     await expect(page).toHaveScreenshot('dim-tall-rows.png');
   });
 });
+
+// ── Language Support ──────────────────────────────────────────────────────────
+
+test.describe('Language support', () => {
+  test('Spanish chart (es)', async ({ page }) => {
+    const svg = renderSVG({
+      tasks: TASKS,
+      theme: 'light',
+      title: 'Gráfico en Español',
+      timeUnit: 'week',
+      language: 'es',
+    });
+    const shot = await capture(page, svg, 'lang-spanish.png');
+    expect(shot.length).toBeGreaterThan(0);
+    await expect(page).toHaveScreenshot('lang-spanish.png');
+  });
+});

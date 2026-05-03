@@ -1,4 +1,5 @@
 import { Task, TimeUnit, TimeColumn, HeaderSpan, LayoutRow } from './types';
+import { getLanguagePack } from './i18n';
 
 export function parseDates(task: Task): Task {
   return {
@@ -62,41 +63,42 @@ export function addUnits(date: Date, unit: TimeUnit, count: number): Date {
   return d;
 }
 
-export function generateColumns(start: Date, end: Date, timeUnit: TimeUnit): TimeColumn[] {
+export function generateColumns(start: Date, end: Date, timeUnit: TimeUnit, language: 'en' | 'es' = 'en'): TimeColumn[] {
   const columns: TimeColumn[] = [];
   const current = new Date(start);
 
   while (current < end) {
-    columns.push(buildColumn(new Date(current), timeUnit));
+    columns.push(buildColumn(new Date(current), timeUnit, language));
     advanceDate(current, timeUnit);
   }
 
   return columns;
 }
 
-function buildColumn(date: Date, timeUnit: TimeUnit): TimeColumn {
+function buildColumn(date: Date, timeUnit: TimeUnit, language: 'en' | 'es' = 'en'): TimeColumn {
+  const lang = getLanguagePack(language);
   const dow = date.getDay();
   switch (timeUnit) {
     case 'day':
       return {
         date,
         label: String(date.getDate()),
-        subLabel: 'SMTWTFS'[dow],
+        subLabel: lang.dayAbbreviations[dow],
         isWeekend: dow === 0 || dow === 6,
         isMonthStart: date.getDate() === 1,
       };
     case 'week':
       return {
         date,
-        label: `W${isoWeekNumber(date)}`,
-        subLabel: `${date.getDate()} ${shortMonth(date)}`,
+        label: `${lang.weekPrefix}${isoWeekNumber(date)}`,
+        subLabel: `${date.getDate()} ${shortMonth(date, lang.locale)}`,
         isWeekend: false,
         isMonthStart: date.getDate() <= 7,
       };
     case 'month':
       return {
         date,
-        label: date.toLocaleString('default', { month: 'short' }),
+        label: date.toLocaleString(lang.locale, { month: 'short' }),
         subLabel: String(date.getFullYear()).slice(2),
         isWeekend: false,
         isMonthStart: true,
@@ -128,14 +130,15 @@ export function getChartEnd(columns: TimeColumn[], timeUnit: TimeUnit): Date {
   return d;
 }
 
-export function generateHeaderSpans(columns: TimeColumn[], timeUnit: TimeUnit): HeaderSpan[] {
+export function generateHeaderSpans(columns: TimeColumn[], timeUnit: TimeUnit, language: 'en' | 'es' = 'en'): HeaderSpan[] {
   if (!columns.length) return [];
+  const lang = getLanguagePack(language);
   const spans: HeaderSpan[] = [];
-  let currentLabel = parentLabel(columns[0].date, timeUnit);
+  let currentLabel = parentLabel(columns[0].date, timeUnit, lang.locale);
   let startCol = 0;
 
   for (let i = 1; i < columns.length; i++) {
-    const label = parentLabel(columns[i].date, timeUnit);
+    const label = parentLabel(columns[i].date, timeUnit, lang.locale);
     if (label !== currentLabel) {
       spans.push({ label: currentLabel, startCol, endCol: i });
       currentLabel = label;
@@ -146,9 +149,9 @@ export function generateHeaderSpans(columns: TimeColumn[], timeUnit: TimeUnit): 
   return spans;
 }
 
-function parentLabel(date: Date, unit: TimeUnit): string {
+function parentLabel(date: Date, unit: TimeUnit, locale: string = 'en-US'): string {
   if (unit === 'month' || unit === 'quarter') return String(date.getFullYear());
-  return date.toLocaleString('default', { month: 'long' }) + ' ' + date.getFullYear();
+  return date.toLocaleString(locale, { month: 'long' }) + ' ' + date.getFullYear();
 }
 
 export function buildRows(tasks: Task[], palette: string[]): LayoutRow[] {
@@ -203,6 +206,6 @@ function isoWeekNumber(date: Date): number {
   return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
 }
 
-function shortMonth(date: Date): string {
-  return date.toLocaleString('default', { month: 'short' });
+function shortMonth(date: Date, locale: string = 'en-US'): string {
+  return date.toLocaleString(locale, { month: 'short' });
 }

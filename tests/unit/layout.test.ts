@@ -330,3 +330,58 @@ describe('getChartEnd', () => {
     expect(end.getMonth()).toBe(2); // March
   });
 });
+
+// ── Language Support ──────────────────────────────────────────────────────────
+
+describe('generateColumns with language support', () => {
+  const start = d('2025-01-06'); // Monday
+  const end   = d('2025-01-13');
+
+  it('day unit: English day abbreviations (default)', () => {
+    const cols = generateColumns(start, end, 'day');
+    expect(cols[0].subLabel).toBe('M'); // Monday
+    expect(cols[6].subLabel).toBe('S'); // Sunday
+  });
+
+  it('day unit: Spanish day abbreviations (es)', () => {
+    const cols = generateColumns(start, end, 'day', 'es');
+    expect(cols[0].subLabel).toBe('L'); // Lunes (Monday)
+    expect(cols[6].subLabel).toBe('D'); // Domingo (Sunday)
+  });
+
+  it('week unit: English week prefix (default)', () => {
+    const cols = generateColumns(start, d('2025-01-19'), 'week');
+    expect(cols[0].label).toMatch(/^W\d+$/); // W1, W2, etc.
+  });
+
+  it('week unit: Spanish week prefix (es)', () => {
+    const cols = generateColumns(start, d('2025-01-19'), 'week', 'es');
+    expect(cols[0].label).toMatch(/^S\d+$/); // S1, S2, etc. (Semana)
+  });
+
+  it('month unit: English month names (default)', () => {
+    const cols = generateColumns(d('2025-01-01'), d('2025-04-01'), 'month');
+    expect(cols[0].label).toBe('Jan');
+    expect(cols[1].label).toBe('Feb');
+  });
+
+  it('month unit: Spanish month names (es)', () => {
+    const cols = generateColumns(d('2025-01-01'), d('2025-04-01'), 'month', 'es');
+    expect(cols[0].label).toBe('ene');
+    expect(cols[1].label).toBe('feb');
+  });
+});
+
+describe('generateHeaderSpans with language support', () => {
+  const cols = generateColumns(d('2025-01-06'), d('2025-02-17'), 'week');
+
+  it('English header (default)', () => {
+    const spans = generateHeaderSpans(cols, 'week');
+    expect(spans[0].label).toMatch(/January \d{4}/);
+  });
+
+  it('Spanish header (es)', () => {
+    const spans = generateHeaderSpans(cols, 'week', 'es');
+    expect(spans[0].label).toMatch(/enero \d{4}/);
+  });
+});
