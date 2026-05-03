@@ -1,5 +1,5 @@
 import { Task, TimeUnit, TimeColumn, HeaderSpan, LayoutRow } from './types';
-import { getLanguagePack } from './i18n';
+import { getLanguagePack, Locale } from './i18n';
 
 export function parseDates(task: Task): Task {
   return {
@@ -63,7 +63,7 @@ export function addUnits(date: Date, unit: TimeUnit, count: number): Date {
   return d;
 }
 
-export function generateColumns(start: Date, end: Date, timeUnit: TimeUnit, language: 'en' | 'es' = 'en'): TimeColumn[] {
+export function generateColumns(start: Date, end: Date, timeUnit: TimeUnit, language: Locale = 'en'): TimeColumn[] {
   const columns: TimeColumn[] = [];
   const current = new Date(start);
 
@@ -75,7 +75,7 @@ export function generateColumns(start: Date, end: Date, timeUnit: TimeUnit, lang
   return columns;
 }
 
-function buildColumn(date: Date, timeUnit: TimeUnit, language: 'en' | 'es' = 'en'): TimeColumn {
+function buildColumn(date: Date, timeUnit: TimeUnit, language: Locale = 'en'): TimeColumn {
   const lang = getLanguagePack(language);
   const dow = date.getDay();
   switch (timeUnit) {
@@ -130,7 +130,7 @@ export function getChartEnd(columns: TimeColumn[], timeUnit: TimeUnit): Date {
   return d;
 }
 
-export function generateHeaderSpans(columns: TimeColumn[], timeUnit: TimeUnit, language: 'en' | 'es' = 'en'): HeaderSpan[] {
+export function generateHeaderSpans(columns: TimeColumn[], timeUnit: TimeUnit, language: Locale = 'en'): HeaderSpan[] {
   if (!columns.length) return [];
   const lang = getLanguagePack(language);
   const spans: HeaderSpan[] = [];

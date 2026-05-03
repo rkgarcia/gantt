@@ -1,6 +1,6 @@
 import { GanttOptions, GanttTheme, LayoutRow, TimeColumn } from './types';
 import { resolveTheme } from './themes';
-import { getLanguagePack } from './i18n';
+import { getLanguagePack, Locale } from './i18n';
 import {
   parseDates, getDateRange, generateColumns, generateHeaderSpans,
   buildRows, dateToX, getChartEnd,
@@ -344,7 +344,7 @@ function renderBars(
   return o;
 }
 
-function legend(theme: GanttTheme, pad: number, y: number, h: number, language: 'en' | 'es' = 'en'): string {
+function legend(theme: GanttTheme, pad: number, y: number, h: number, language: Locale = 'en'): string {
   const lang = getLanguagePack(language);
   const items: Array<{ label: string; draw: () => string }> = [
     {

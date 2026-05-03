@@ -1,5 +1,3 @@
-export type Locale = 'en' | 'es';
-
 interface LanguagePack {
   dayAbbreviations: string;
   weekPrefix: string;
@@ -13,7 +11,7 @@ interface LanguagePack {
   };
 }
 
-export const LANGUAGES: Record<Locale, LanguagePack> = {
+export const LANGUAGES = {
   en: {
     dayAbbreviations: 'SMTWTFS',
     weekPrefix: 'W',
@@ -38,7 +36,9 @@ export const LANGUAGES: Record<Locale, LanguagePack> = {
       dependency: 'Dependencia',
     },
   },
-};
+} satisfies Record<string, LanguagePack>;
+
+export type Locale = keyof typeof LANGUAGES;
 
 export function getLanguagePack(language: Locale = 'en'): LanguagePack {
   return LANGUAGES[language];

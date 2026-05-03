@@ -55,6 +55,7 @@ export { renderSVG } from './renderer';
 export { exportSVG, exportPNG, exportJPG, toDataURL } from './exporter';
 export { THEMES, resolveTheme } from './themes';
 export { LANGUAGES, getLanguagePack } from './i18n';
+export type { Locale } from './i18n';
 
 // Type exports
 export type {

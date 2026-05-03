@@ -55,11 +55,13 @@ export interface GanttTheme {
   taskBorderRadius: number;
 }
 
+import type { Locale } from './i18n';
+
 export interface GanttOptions {
   tasks: Task[];
   theme?: Partial<GanttTheme> | 'light' | 'dark' | 'ocean' | 'forest';
   elements?: GanttElements;
-  language?: 'en' | 'es';
+  language?: Locale;
   startDate?: Date;
   endDate?: Date;
   timeUnit?: TimeUnit;
